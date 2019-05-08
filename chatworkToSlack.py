@@ -3,6 +3,7 @@ from __future__ import print_function
 
 import requests
 import os
+from pytz import timezone
 from datetime import datetime
 
 cwtoken = os.environ['CHATWORK_API_TOKEN']
@@ -37,7 +38,8 @@ def lambda_handler(event, context):
                     time = res_json[i]['send_time']
 
                     try :
-                        text = '*' + str(datetime.fromtimestamp(time)) + ' message from: ' + name + '*\n'
+                        jst_time = datetime.fromtimestamp(time).as_timezone(timezone('Asia/Tokyo'))
+                        text = '*' + str(jst_time) + ' message from: ' + name + '*\n'
                         for mention in mentions:
                             cw_to = mention['cwto']
                             sl_to = mention['slto']
